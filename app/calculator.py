@@ -17,8 +17,8 @@ def add():
 
     try:
         result = float(num1) + float(num2)
-    except ValueError:
-        return jsonify({"error": "Invalid numbers"}), 400
+    except (KeyError, TypeError, ValueError):
+        return jsonify({"error": "Invalid Input"}), 400
 
     return jsonify({"result": result}), 200
 
@@ -33,7 +33,7 @@ def subtract():
 
     try:
         result = float(a) - float(b)
-    except ValueError:
+    except (KeyError, TypeError, ValueError):
         return jsonify({"error": "Invalid Input"}), 400
     return jsonify({"result": result}), 200
 
@@ -48,7 +48,7 @@ def multiplication():
 
     try:
         result = float(a) * float(b)
-    except ValueError:
+    except (KeyError, TypeError, ValueError):
         return jsonify({"error": "Invalid Input"}), 400
     return jsonify({"result": result}), 200
 
@@ -57,13 +57,14 @@ def division():
     data = request.get_json()
     a = data.get("a")
     b = data.get("b")
-
+    if b == 0:
+        return jsonify({'error': 'Cant divide by zero'}), 400
     if a is None or b is None:
         return jsonify({"error": "Missing input"}), 400
 
     try:
         result = float(a) / float(b)
-    except ValueError:
+    except (KeyError, TypeError, ValueError):
         return jsonify({"error": "Invalid Input"}), 400
     return jsonify({"result": result}), 200
 
